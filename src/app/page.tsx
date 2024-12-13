@@ -1,23 +1,53 @@
-import FeaturesSection from "@/components/custom/FeaturesSection";
-import HeroSection from "@/components/custom/HeroSection";
-import { getHompePageData } from "@/data/loaders";
+import qs from "qs";
+
+const homePageQuery = qs.stringify({
+  populate: {
+    blocks: {
+      on:{
+        "layout.hero-section": {
+            populate: {
+              image: {
+                fields: ["url", "alternativeText"]
+              },
+              link: {
+                populate: true
+              }
+            }
+          }
+      }
+    }
+  },
+});
 
 
-export default async function Home() {
-  const strapiData = await getHompePageData();
-  const { blocks } = strapiData?.data || [];
+async function getStrapiData(path: string) {
+  const baseUrl = "http://localhost:1337"
 
-  return <main>{blocks.map((block: any) => blockRenderer(block))}</main>;
+  const url = new URL(path, baseUrl);
+  url.search = homePageQuery;
+
+  console.log(url.href);
+
+  try {
+    const response = await fetch(url.href);
+    const data = await response.json();
+    console.dir(data, { depth: null });
+    return data;
+
+  } catch (error) {
+    console.error(error)
+  }
 }
 
-function blockRenderer(block: any) {
-  switch (block.__component) {
-    case "layout.hero-section":
-      return <HeroSection data={block} key={block.id} />
-    case "layout.features-section":
-      return <FeaturesSection data={block} key={block.id} />
-  
-    default:
-      return null;
-  }
+export default async function Home() {
+  const strapiData = await getStrapiData("/api/home-page");
+
+  const { title, description } = strapiData.data;
+
+  return (
+    <main className="container mx-auto py-6">
+      <h1 className="text-5xl font-bold">{title}</h1>
+      <p className="text-xl mt-4">{description}</p>
+    </main>
+  );
 }
