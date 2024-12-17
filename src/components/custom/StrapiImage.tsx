@@ -11,11 +11,13 @@ interface StrapiImageProps {
 
 const StrapiImage = ({ src, alt, height, width, className }: Readonly<StrapiImageProps>) => {
     if (!src) return null;
+
     const imageUrl = getStrapiMedia(src);
     const imageFallback = `https://placeholder.co/${width}x${height}`;
 
+
   return (
-    <Image 
+    <Image
         src={imageUrl ?? imageFallback}
         alt={alt}
         height={height}
