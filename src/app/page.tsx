@@ -1,4 +1,6 @@
+import FeaturesSection from "@/components/custom/FeaturesSection";
 import HeroSection from "@/components/custom/HeroSection";
+import { getStrapiUrl } from "@/lib/utils";
 import qs from "qs";
 
 const homePageQuery = qs.stringify({
@@ -12,9 +14,16 @@ const homePageQuery = qs.stringify({
               },
               link: {
                 populate: true
-              }
+              },
             }
-          }
+          },
+          "layout.features-section": {
+            populate: {
+              feature: {
+                populate: true
+              },
+            }
+          },
       }
     }
   },
@@ -22,7 +31,7 @@ const homePageQuery = qs.stringify({
 
 
 async function getStrapiData(path: string) {
-  const baseUrl = "http://127.0.0.1:1337"
+  const baseUrl = getStrapiUrl();
 
   const url = new URL(path, baseUrl);
   url.search = homePageQuery;
@@ -49,6 +58,7 @@ export default async function Home() {
   return (
     <main>
       <HeroSection data={blocks[0]}/>
+      <FeaturesSection />
     </main>
   );
 }
