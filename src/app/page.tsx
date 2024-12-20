@@ -1,31 +1,31 @@
+import { getStrapiUrl } from "@/lib/utils";
 import FeaturesSection from "@/components/custom/FeaturesSection";
 import HeroSection from "@/components/custom/HeroSection";
-import { getStrapiUrl } from "@/lib/utils";
 import qs from "qs";
 
 const homePageQuery = qs.stringify({
   populate: {
     blocks: {
-      on:{
+      on: {
         "layout.hero-section": {
-            populate: {
-              image: {
-                fields: ["url", "alternativeText"]
-              },
-              link: {
-                populate: true
-              },
-            }
+          populate: {
+            image: {
+              fields: ["url", "alternativeText"],
+            },
+            link: {
+              populate: true,
+            },
           },
-          "layout.features-section": {
-            populate: {
-              feature: {
-                populate: true
-              },
-            }
+        },
+        "layout.features-section": {
+          populate: {
+            features: {
+              populate: true,
+            },
           },
-      }
-    }
+        },
+      },
+    },
   },
 });
 
@@ -58,7 +58,7 @@ export default async function Home() {
   return (
     <main>
       <HeroSection data={blocks[0]}/>
-      <FeaturesSection />
+      <FeaturesSection data={blocks[1]}/>
     </main>
   );
 }
