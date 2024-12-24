@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { getGlobalPageData } from "@/data/loaders";
 import Header from "@/components/custom/Header";
+import Footer from "@/components/custom/Footer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -35,6 +36,7 @@ export default async function RootLayout({
       >
         <Header data={globalData.data.header}/>
         <div>{children}</div>
+        <Footer data={globalData.data.footer}/>
       </body>
     </html>
   );
