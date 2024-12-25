@@ -37,7 +37,6 @@ const FeaturesSection = ({
     readonly data: FeaturesSectionProps
 }) => {
     const { features } = data;
-    console.dir(features, {depth: null});
 
   return (
     <div>

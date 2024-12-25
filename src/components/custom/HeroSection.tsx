@@ -25,7 +25,6 @@ interface HeroSectionProps {
 }
 
 const HeroSection = ({ data }: Readonly<HeroSectionProps> ) => {
-    console.dir(data, { depth: null })
     const { heading, subHeading, image, link } = data;
 
   return (
