@@ -13,11 +13,21 @@ import {
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { registerUserAction } from "@/data/actions/auth-actions";
+import { useFormState } from "react-dom";
+
+const INITIAL_STATE = {
+    data: "hello you wonderful people",
+};
 
 export function SignupForm() {
+    const [formState, formAction] = useFormState(registerUserAction, INITIAL_STATE);
+
+    console.log(formState, "client");
+
   return (
     <div className="w-full max-w-md">
-      <form>
+      <form action={formAction}>
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-3xl font-bold">Sign Up</CardTitle>
@@ -56,7 +66,7 @@ export function SignupForm() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col">
-            <button className="w-full">Sign Up</button>
+            <button className="w-full" type="submit">Sign Up</button>
           </CardFooter>
         </Card>
         <div className="mt-4 text-center text-sm">
