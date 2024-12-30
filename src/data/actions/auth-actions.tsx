@@ -1,6 +1,7 @@
 "use server";
 
 import { z } from "zod";
+import { registerUserService } from "../services/auth-service";
 
 const schemaRegister = z.object({
     username: z.string().min(3).max(20, {
@@ -15,8 +16,6 @@ const schemaRegister = z.object({
 });
 
 export async function registerUserAction(prevState: any, formData: FormData) {
-    console.log("Hello from register User Action");
-
     const validatedFields = schemaRegister.safeParse({
         username: formData.get('username'),
         password: formData.get('password'),
@@ -30,7 +29,20 @@ export async function registerUserAction(prevState: any, formData: FormData) {
             message: "Missing Fields. Failed to Register",
         }
     }
+
+    const responseData = await registerUserService(validatedFields.data);
+
+    if (responseData.error) {
+        return {
+            ...prevState,
+            strapiErrors: responseData.error,
+            zodErrors: null,
+            message: "Failed to Register.",
+        }
+    }
     
+    console.log("User Registered Successfuly", responseData.jwt);
+
     return {
         ...prevState,
         data: "ok",
