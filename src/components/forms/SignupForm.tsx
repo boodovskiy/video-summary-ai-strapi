@@ -14,7 +14,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { registerUserAction } from "@/data/actions/auth-actions";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { ZodErrors } from "../custom/ZodErrors";
 import { StrapiErrors } from "../custom/StrapiErrors";
 
@@ -25,7 +25,7 @@ const INITIAL_STATE = {
 };
 
 export function SignupForm() {
-    const [formState, formAction] = useFormState(registerUserAction, INITIAL_STATE);
+    const [formState, formAction] = useActionState(registerUserAction, INITIAL_STATE);
 
     console.log(formState, "client");
 
