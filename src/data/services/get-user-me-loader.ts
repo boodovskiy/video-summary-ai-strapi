@@ -4,11 +4,12 @@ import { getAuthToken } from "./get-token";
 export async function getUserMeLoader(){
     const baseUrl = getStrapiUrl();
 
-    const url = new URL("/api/user/me", baseUrl);
+    const url = new URL("/api/users/me", baseUrl);
 
     const authToken = await getAuthToken();
+    
     if (!authToken) return { ok: false, data: null, error: null };
-
+   
     try {
         const response = await fetch(url.href, {
             method: "GET",
