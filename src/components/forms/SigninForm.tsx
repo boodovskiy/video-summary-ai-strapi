@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { SubmitButton } from "../custom/SubmitButton";
 
 export function SigninForm() {
     return (
@@ -37,7 +38,11 @@ export function SigninForm() {
                         </div>
                     </CardContent>
                     <CardFooter className="flex flex-col">
-                        <button className="w-full">Sign In</button>
+                        <SubmitButton 
+                            className="w-full"
+                            text="Sign Up"
+                            loadingText="Loading"
+                        />
                     </CardFooter>
                 </Card>
                 <div className="mt-4 text-center text-sm">

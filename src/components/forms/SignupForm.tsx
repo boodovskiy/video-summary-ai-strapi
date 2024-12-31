@@ -17,6 +17,7 @@ import { registerUserAction } from "@/data/actions/auth-actions";
 import { useActionState } from "react";
 import { ZodErrors } from "../custom/ZodErrors";
 import { StrapiErrors } from "../custom/StrapiErrors";
+import { SubmitButton } from "../custom/SubmitButton";
 
 const INITIAL_STATE = {
     data: null,
@@ -73,7 +74,11 @@ export function SignupForm() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col">
-            <button className="w-full" type="submit">Sign Up</button>
+            <SubmitButton 
+                className="w-full"
+                text="Sign Up"
+                loadingText="Loading"
+             />
             <StrapiErrors error={formState?.strapiErrors} />
           </CardFooter>
         </Card>
