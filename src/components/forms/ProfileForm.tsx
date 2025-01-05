@@ -1,9 +1,17 @@
 "use client";
 import { cn } from '@/lib/utils';
-import React from 'react'
+import React, { useActionState } from 'react'
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { SubmitButton } from '../custom/SubmitButton';
+import { updateProfileAction } from '@/data/actions/profile-actions';
+import { StrapiErrors } from '../custom/StrapiErrors';
+
+const INITIAL_STATE = {
+    data: null,
+    strapiErrors: null,
+    message: null,
+}
 
 interface ProfileFormProps {
     id: string;
@@ -31,8 +39,14 @@ const ProfileForm = ({
     readonly data: ProfileFormProps,
     readonly className?: string;
 }) => {
+    const updateProfileWithId = updateProfileAction.bind(null, data.id);
+    const [formState, formAction] = useActionState( updateProfileWithId, INITIAL_STATE );
+
   return (
-    <form className={cn("space-y-4", className)}>
+    <form 
+        className={cn("space-y-4", className)}
+        action={formAction}
+    >
         <div className="space-y-4 grid">
             <div className="grid grid-cols-3 gap-4">
                 <Input 
@@ -57,14 +71,12 @@ const ProfileForm = ({
                     name="firstName"
                     placeholder='First Name'
                     defaultValue={data?.firstName || ""}
-                    disabled
                 />
                 <Input 
                     id="lastName"
                     name="lastName"
                     placeholder='Last Name'
                     defaultValue={data?.lastName || ""}
-                    disabled
                 />
             </div>
             <Textarea 
@@ -79,6 +91,7 @@ const ProfileForm = ({
         <div className="flex justify-end">
             <SubmitButton text="Update Profile" loadingText='Savig Profile'/>
         </div>
+        <StrapiErrors error={formState?.strapiErrors}/>
     </form>
   )
 }
