@@ -74,7 +74,7 @@ const ImagePicker = ({
   return (
     <React.Fragment>
         <div className="hidden">
-            <Label htmlFor={name}></Label>
+            <Label htmlFor={name}>{label}</Label>
             <Input
                 type='file'
                 id={id}
