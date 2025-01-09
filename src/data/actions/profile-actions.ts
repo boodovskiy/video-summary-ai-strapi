@@ -3,6 +3,9 @@
 import { revalidatePath } from "next/cache";
 import qs from "qs";
 import { mutateData } from "../services/mutate-data";
+import { getUserMeLoader } from "../services/get-user-me-loader";
+import { z } from "zod";
+import { fileDeleteService, fileUploadService } from "../services/file-service";
 
 export async function updateProfileAction(    
     userId: string,
@@ -52,4 +55,114 @@ export async function updateProfileAction(
         strapiErrors: null,
     }
 
+}
+
+const MAX_FILE_SIZE = 5000000;
+
+const ACCEPTED_IMAGE_TYPES = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/webp",
+];
+
+const imageSchema = z.object({
+    image: z
+        .any()
+        .refine((file) => {
+            if (file.size === 0 || file.name === undefined) return false;
+            else return true;
+        }, "Please update or add new image.")
+        
+        .refine(
+            (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+            ".jpg, .jpeg, .png and .webp files are accepted."
+        )
+        .refine((file) => file.size <= MAX_FILE_SIZE, "Max file size is 5MB."),
+});
+
+
+export async function uploadProfileImageAction(
+    imageId: string,
+    prevState: any,
+    formData: FormData,
+) {
+    // Get the Logged In User
+    const user = await getUserMeLoader();
+    if (!user.ok) throw new Error("You are not authorized to perform this action.");
+
+    const userId = user.data.id;
+
+    // Convert form data to object
+    const data = Object.fromEntries(formData);
+
+    // Validate the image
+    const validateFields = imageSchema.safeParse({
+        image: data.image,
+    });
+
+    if(!validateFields.success) {
+        return {
+            ...prevState,
+            zodErrors: validateFields.error.flatten().fieldErrors,
+            strapiErrors: null,
+            data: null,
+            message: "Invalid image",
+        };
+    } 
+
+    //Delete previous image if exists
+    if (imageId) {
+        try {
+            await fileDeleteService(imageId);
+        } catch (error) {
+            return {
+                ...prevState,
+                strapiErrors: null,
+                zodErrors: null,
+                message: "Failed to Delete Previous Image",
+            };
+        }
+    }
+
+    // Upload new image to Media Library
+    const fileUploadResponse = await fileUploadService(data.image);
+
+    if(!fileUploadResponse) {
+        return {
+            ...prevState,
+            strapiErrors: null,
+            zodErrors: null,
+            message: "Oops! Something went wrong. Please try again."
+        }
+    }
+
+    if(fileUploadResponse.error){
+        return {
+            ...prevState,
+            strapiErrors: fileUploadResponse.error,
+            zodErrors: null,
+            message: "Failed to Upload File",
+        };
+    }
+
+    const updateImageId = fileUploadResponse[0].id;
+    const payload = { image: updateImageId };
+
+    // Update User Profile with new Image
+    const updateImageResponse = await mutateData(
+        "PUT",
+        `/api/users/${userId}`,
+        payload
+    );
+
+    revalidatePath("/dashboard/account");
+
+    return {
+        ...prevState,
+        data: updateImageResponse,
+        strapiErrors: null,
+        zodErrors: null,
+        message: "Image Uploaded",
+    };
 }
