@@ -1,10 +1,8 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import qs from "qs";
 import { mutateData } from "../services/mutate-data";
-import { StrapiErrors } from "@/components/custom/StrapiErrors";
-import { error } from "console";
-import { revalidatePath } from "next/cache";
 
 export async function updateProfileAction(    
     userId: string,

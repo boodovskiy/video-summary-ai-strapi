@@ -1,10 +1,19 @@
 import { getStrapiUrl } from "@/lib/utils";
 import { getAuthToken } from "./get-token";
+import qs from "qs";
 
 export async function getUserMeLoader(){
     const baseUrl = getStrapiUrl();
 
     const url = new URL("/api/users/me", baseUrl);
+
+    url.search = qs.stringify({
+        populate: {
+            image: {
+                fields: ["url", "alternativeText"],
+            },
+        },
+    });
 
     const authToken = await getAuthToken();
     
