@@ -5,6 +5,7 @@ import "./globals.css";
 import { getGlobalPageData, getGlobalPageMetadata } from "@/data/loaders";
 import Header from "@/components/custom/Header";
 import Footer from "@/components/custom/Footer";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -38,7 +39,8 @@ export default async function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      > 
+        <Toaster position="bottom-center"/>
         <Header data={globalData.data.header}/>
         <div>{children}</div>
         <Footer data={globalData.data.footer}/>
