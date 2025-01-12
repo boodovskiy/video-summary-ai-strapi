@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { SubmitButton } from "../custom/SubmitButton";
+import { generateSummaryService } from "@/data/services/summary-service";
 
 interface StrapiErrorsProps {
     message: string | null;
@@ -24,6 +25,13 @@ export function SummaryForm() {
     async function handleFormSubmit(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
         setLoading(true);
+
+        const formData = new FormData(event.currentTarget);
+        const videoId = formData.get("videoId") as string;
+
+        const summaryResponseData = await generateSummaryService(videoId);
+        console.log("Response from route handler:", summaryResponseData);
+        
         toast.success("Summary Created");
         setLoading(false);
     }
