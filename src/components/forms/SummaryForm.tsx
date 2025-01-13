@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { Input } from "../ui/input";
-import { cn } from "@/lib/utils";
+import { cn, extractYouTubeId } from "@/lib/utils";
 import { SubmitButton } from "../custom/SubmitButton";
 import { generateSummaryService } from "@/data/services/summary-service";
 
@@ -29,10 +29,26 @@ export function SummaryForm() {
         const formData = new FormData(event.currentTarget);
         const videoId = formData.get("videoId") as string;
 
+        const processedVideoId = extractYouTubeId(videoId);
+
+        if(!processedVideoId) {
+            toast.error("Invalid Youtube Video ID");
+            setLoading(false);
+            setValue("");
+            setError({
+                ...INITIAL_STATE,
+                message: "Invalid Youtube Video ID",
+                name: "Invalid Id",
+            });
+            return;
+        }
+
+        toast.success("Generating Summary");
+
         const summaryResponseData = await generateSummaryService(videoId);
         console.log("Response from route handler:", summaryResponseData);
         
-        toast.success("Summary Created");
+        toast.success("Testing Toast");
         setLoading(false);
     }
 
