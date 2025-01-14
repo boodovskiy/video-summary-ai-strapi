@@ -48,6 +48,18 @@ export function SummaryForm() {
         const summaryResponseData = await generateSummaryService(videoId);
         console.log("Response from route handler:", summaryResponseData);
         
+        if (summaryResponseData.error) {
+            setValue("");
+            toast.error(summaryResponseData.error);
+            setError({
+                ...INITIAL_STATE,
+                message: summaryResponseData.error,
+                name: 'Summary Error',
+            });
+            setLoading(false);
+            return;
+        }
+
         toast.success("Testing Toast");
         setLoading(false);
     }
