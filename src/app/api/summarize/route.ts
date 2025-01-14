@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
 
     try {
         const transcript = await fetch(url);
-        transcriptData = transcript.text();
+        transcriptData = await transcript.text();
     } catch (error) {
         console.log("Error processing request:", error);
         if (error instanceof Error)
