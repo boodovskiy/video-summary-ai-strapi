@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import ReactMarkdown from "react-markdown";
 import { Textarea } from "../ui/textarea";
 import { SubmitButton } from "../custom/SubmitButton";
+import { DeleteButton } from "../custom/DeleteButton";
 
 export function SummaryCardForm({
     item,
@@ -70,7 +71,7 @@ export function SummaryCardForm({
                         />
                     </form>
                     <form>
-
+                        <DeleteButton className="absolute right-4 top-4 bg-red-700 hover:bg-red-600"/>
                     </form>
                 </div>
             </CardContent>
