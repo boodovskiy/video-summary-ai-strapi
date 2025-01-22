@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 
 const YouTubePlayer = dynamic(
-    () => import("@/components/custom/client-youtube-player/youtube-player"),
+    () => import("@/components/custom/client-youtube-player/YouTubePlayer"),
     { ssr: false }
 );
 
