@@ -29,7 +29,7 @@ export function SummaryCardForm({
     const deleteSummaryById = deleteSummaryAction.bind(null, item.documentId);
 
     const [deleteState, deleteAction] = useActionState(
-        deleteSummaryById,
+        deleteSummaryAction,
         INITIAL_STATE
     );
 
