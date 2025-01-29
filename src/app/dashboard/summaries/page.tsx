@@ -49,7 +49,7 @@ export default async function SummariesRoute({
     const search = await searchParams;
     const query = search?.query ?? "";
     console.log(query);
-    const { data } = await getSummaries();
+    const { data } = await getSummaries(query);
     if (!data) return null;
 
     return (
