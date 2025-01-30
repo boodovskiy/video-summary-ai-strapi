@@ -39,6 +39,7 @@ function LinkCard({ documentId, title, summary }: Readonly<LinkCardProps>){
 
 interface SearchParamsProps {
     searchParams?: {
+        page?: string;
         query?: string;
     }
 }
