@@ -1,3 +1,4 @@
+import { PaginationComponent } from "@/components/custom/PaginationComponent";
 import { Search } from "@/components/custom/Search";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getSummaries } from "@/data/loaders";
@@ -49,8 +50,12 @@ export default async function SummariesRoute({
 }: SearchParamsProps) {
     const search = await searchParams;
     const query = search?.query ?? "";
+    const currentPage = Number(search?.page) || 1;
+
     console.log(query);
-    const { data } = await getSummaries(query);
+    const { data, meta } = await getSummaries(query, currentPage);
+    const pageCount = meta?.pagination?.pageCount;
+
     if (!data) return null;
 
     return (
@@ -61,6 +66,7 @@ export default async function SummariesRoute({
                     <LinkCard key={item.documentId} {...item}/>
                 ))}
             </div>
+            <PaginationComponent pageCount={pageCount} />
         </div>
     );
 }
