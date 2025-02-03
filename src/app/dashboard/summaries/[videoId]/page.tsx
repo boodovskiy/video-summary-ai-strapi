@@ -1,16 +1,16 @@
 import { SummaryCardForm } from "@/components/forms/SummaryCardForm";
 import { getSummaryById } from "@/data/loaders";
 
-interface PraramsProps {
+interface ParamsProps {
     params: {
         videoId: string;
     }
 }
 
-const SummaryCardRoute = async (props: Readonly<PraramsProps>) => {
-    const params = await props?.params;
-    const {videoId} = params;
+const SummaryCardRoute = async ({ params }: ParamsProps) => {
+    const { videoId } = params;
     const data = await getSummaryById(videoId);
+    
   return <SummaryCardForm item={data.data} />
 }
 
