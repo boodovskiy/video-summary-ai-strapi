@@ -20,6 +20,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "placehold.co",
       },
+      {
+        protocol: "https",
+        hostname: "backend-wispy-fire-4184.fly.dev",        
+      },
     ],
   },
 };
