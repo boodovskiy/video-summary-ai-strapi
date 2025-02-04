@@ -39,10 +39,10 @@ function LinkCard({ documentId, title, summary }: Readonly<LinkCardProps>){
 }
 
 interface SearchParamsProps {
-    searchParams?: {
+    searchParams?: Promise<{
         page?: string;
         query?: string;
-    }
+    }>;
 }
 
 export default async function SummariesRoute({
