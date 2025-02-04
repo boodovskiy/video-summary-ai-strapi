@@ -12,6 +12,7 @@ interface ImagePickerProps {
     defaultValue?: string; 
 }
 
+// eslint-disable-next-line no-unused-vars
 function generateDataUrl(file: File, callback: (imageUrl: string) => void) {
     const reader = new FileReader();
     reader.onload = () => callback(reader.result as string);

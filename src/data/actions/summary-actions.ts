@@ -1,10 +1,9 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getAuthToken } from "../services/get-token";
 import { mutateData } from "../services/mutate-data";
-import { title } from "process";
-import { revalidatePath } from "next/cache";
 
 interface Payload {
     data: {

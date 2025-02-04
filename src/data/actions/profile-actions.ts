@@ -116,6 +116,7 @@ export async function uploadProfileImageAction(
         try {
             await fileDeleteService(imageId);
         } catch (error) {
+            console.error("Error deleting image:", error);
             return {
                 ...prevState,
                 strapiErrors: null,
