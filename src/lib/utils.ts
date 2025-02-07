@@ -6,8 +6,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getStrapiUrl() {
-  //return process.env.STRAPI_URL ?? "http://127.0.0.1:1337";
-  return process.env.NEXT_PUBLIC_STRAPI_URL || process.env.STRAPI_URL;
+  return process.env.STRAPI_URL ?? "http://127.0.0.1:1337";
+  //return process.env.NEXT_PUBLIC_STRAPI_URL || process.env.STRAPI_URL;
 }
 
 export function getStrapiMedia(url: string | null) {
