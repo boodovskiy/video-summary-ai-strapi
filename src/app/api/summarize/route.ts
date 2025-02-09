@@ -5,6 +5,9 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { ChatOpenAI } from "@langchain/openai";
 import { NextRequest } from "next/server";
 
+export const maxDuration = 45;
+export const dynamic = "force-dynamic";
+
 const TEMPLATE = `
 INSTRUCTIONS: 
   For the this {text} complete the following steps.
