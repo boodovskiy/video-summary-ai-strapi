@@ -18,7 +18,7 @@ export function getStrapiMedia(url: string | null) {
 
 export function extractYouTubeId(urlOrId: string): string | null {
   // Regular expression for YouTube ID format
-  const regExpId = /^[a-zA-Z0-9_-]{11}/;
+  const regExpId = /^[a-zA-Z0-9_-]{11}$/;
 
   // Check if the input is YouTubeId
   if (regExpId.test(urlOrId)) {
