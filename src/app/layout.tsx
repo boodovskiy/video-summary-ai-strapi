@@ -18,14 +18,13 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-
-export async function generateMetadata(): Promise<Metadata> { 
+export async function generateMetadata(): Promise<Metadata> {
   const metadata = await getGlobalPageMetadata();
 
   return {
     title: metadata?.data.title,
     description: metadata?.data.description,
-  }
+  };
 }
 
 export default async function RootLayout({
@@ -34,16 +33,17 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const globalData = await getGlobalPageData();
- 
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      > 
-        <Toaster position="bottom-center"/>
-        <Header data={globalData.data.header}/>
+        suppressHydrationWarning
+      >
+        <Toaster position="bottom-center" />
+        <Header data={globalData.data.header} />
         <div>{children}</div>
-        <Footer data={globalData.data.footer}/>
+        <Footer data={globalData.data.footer} />
       </body>
     </html>
   );
