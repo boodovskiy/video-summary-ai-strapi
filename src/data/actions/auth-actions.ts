@@ -13,6 +13,19 @@ const config = {
     secure: process.env.NODE_ENV === "production",
 };
 
+interface StrapiError {
+    message?: string | null;
+    name?: string;
+    status?: string | null;
+}
+
+interface ActionState {
+    data: unknown | null;
+    message: string | null;
+    zodErrors?: Record<string, string[]> | null;
+    strapiErrors?: StrapiError | null;
+}
+
 const schemaRegister = z.object({
     username: z.string().min(3).max(20, {
         message: "Username must be between 3 and 20 characters",
@@ -25,7 +38,10 @@ const schemaRegister = z.object({
     }),
 });
 
-export async function registerUserAction(prevState: any, formData: FormData) {
+export async function registerUserAction(
+    prevState: ActionState,
+    formData: FormData
+): Promise<ActionState> {
     const validatedFields = schemaRegister.safeParse({
         username: formData.get('username'),
         password: formData.get('password'),
@@ -73,7 +89,10 @@ const schemaLogin = z.object({
         max(100, {message: "Password must be between 6 and 100 characters"}),
 });
 
-export async function loginUserAction(prevState: any, formData: FormData) {
+export async function loginUserAction(
+    prevState: ActionState,
+    formData: FormData
+): Promise<ActionState> {
     const validatedFields = schemaLogin.safeParse({
         identifier: formData.get("identifier"),
         password: formData.get("password"),

@@ -7,7 +7,6 @@ import { cn, extractYouTubeId } from "@/lib/utils";
 import { SubmitButton } from "../custom/SubmitButton";
 import { generateSummaryService } from "@/data/services/summary-service";
 import { createSummaryAction } from "@/data/actions/summary-actions";
-import { set } from "zod";
 
 interface StrapiErrorsProps {
   message: string | null;

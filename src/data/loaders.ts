@@ -86,3 +86,11 @@ export async function getSummaries() {
   const url = new URL("/api/summaries", baseUrl);
   return await fetchData(url.href);
 }
+
+export async function getSummaryById(documentId: string) {
+  const url = new URL(`/api/summaries/${documentId}`, baseUrl);
+  url.search = qs.stringify({
+    populate: "*",
+  });
+  return await fetchData(url.href);
+}

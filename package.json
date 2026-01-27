@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@langchain/core": "^0.3.30",
@@ -40,6 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^8.22.0",
     "@typescript-eslint/parser": "^8.22.0",
     "eslint": "^9.19.0",
+    "eslint-config-next": "^15.5.9",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"

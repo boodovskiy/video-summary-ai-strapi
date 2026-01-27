@@ -19,11 +19,17 @@ const INITIAL_STATE = {
     strapiErrors: null
 }
 
+interface SummaryCardItem {
+    documentId: string;
+    title: string;
+    summary: string;
+}
+
 export function SummaryCardForm({
     item,
     className,
 }: {
-    readonly item: any;
+    readonly item: SummaryCardItem;
     readonly className?: string;
 }) {
     const deleteSummaryById = deleteSummaryAction.bind(null, item.documentId);

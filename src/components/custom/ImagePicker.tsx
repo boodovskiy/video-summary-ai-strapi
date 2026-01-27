@@ -73,8 +73,8 @@ const ImagePicker = ({
 
   return (
     <React.Fragment>
-        <div className="hidden">
-            <Label htmlFor={name}></Label>
+        <div className="sr-only">
+            <Label htmlFor={name}>{label}</Label>
             <Input
                 type='file'
                 id={id}
@@ -82,6 +82,7 @@ const ImagePicker = ({
                 onChange={handleFileChange}
                 ref={fileInput}
                 accept='image/*'
+                aria-label={label}
             />
         </div>
         <ImageCard dataUrl={dataUrl ?? ""} fileInput={fileInput} />
