@@ -1,23 +1,40 @@
+"use server";
+
 import { getStrapiUrl } from "@/lib/utils";
+import { getAuthToken } from "./get-token";
+
+export interface GeneratedSummary {
+    documentId: string;
+    summary: string;
+    title: string;
+    videoId: string;
+}
 
 interface SummaryServiceResponse {
-    data: string;
+    data: GeneratedSummary | null;
     error: string | null;
 }
 
-function extractSummary(result: unknown): string {
-    if (!result || typeof result !== "object") return "";
+function extractSummary(result: unknown): GeneratedSummary | null {
+    if (!result || typeof result !== "object") return null;
 
     const record = result as Record<string, unknown>;
-    if (typeof record.data === "string") return record.data;
-    if (typeof record.summary === "string") return record.summary;
+    if (!record.data || typeof record.data !== "object") return null;
 
-    if (record.data && typeof record.data === "object") {
-        const nested = record.data as Record<string, unknown>;
-        if (typeof nested.summary === "string") return nested.summary;
-    }
+    const data = record.data as Record<string, unknown>;
+    if (
+        typeof data.documentId !== "string" ||
+        typeof data.summary !== "string" ||
+        typeof data.title !== "string" ||
+        typeof data.videoId !== "string"
+    ) return null;
 
-    return "";
+    return {
+        documentId: data.documentId,
+        summary: data.summary,
+        title: data.title,
+        videoId: data.videoId,
+    };
 }
 
 function extractErrorMessage(result: unknown): string | null {
@@ -38,20 +55,25 @@ export async function generateSummaryService(
     videoId: string
 ): Promise<SummaryServiceResponse> {
     if (!videoId) {
-        return { data: "", error: "Missing video id." };
+        return { data: null, error: "Missing video id." };
     }
 
     const baseUrl = getStrapiUrl();
     const url = new URL("/api/summaries/generate", baseUrl);
+    const authToken = await getAuthToken();
+    if (!authToken) {
+        return { data: null, error: "You are not authenticated." };
+    }
 
     try {
         const response = await fetch(url.href, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${authToken}`,
             },
             body: JSON.stringify({ videoId }),
-            cache: "no-cache",
+            cache: "no-store",
         });
 
         let result: unknown = null;
@@ -66,7 +88,7 @@ export async function generateSummaryService(
 
         if (!response.ok || errorMessage || !summary) {
             return {
-                data: "",
+                data: null,
                 error: errorMessage ?? "Failed to generate summary.",
             };
         }
@@ -74,6 +96,6 @@ export async function generateSummaryService(
         return { data: summary, error: null };
     } catch (error) {
         console.log("Summary service error:", error);
-        return { data: "", error: "Failed to generate summary." };
+        return { data: null, error: "Failed to generate summary." };
     }
 }

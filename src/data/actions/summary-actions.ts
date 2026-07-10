@@ -17,31 +17,6 @@ interface SummaryActionState {
     strapiErrors: StrapiError | null;
 }
 
-interface Payload {
-    data: {
-        title?: string;
-        videoId: string;
-        summary: string;
-    }
-}
-
-export async function createSummaryAction(payload: Payload) {
-    const authToken = await getAuthToken();
-    if (!authToken) throw new Error("No auth token found.");
-
-    const data = await mutateData<{ data?: { documentId?: string } }>(
-        "POST",
-        "/api/summaries",
-        payload
-    );
-
-    if (!data || typeof data !== "object" || !data.data?.documentId) {
-        throw new Error("Summary creation failed.");
-    }
-
-    redirect("/dashboard/summaries/" + data.data.documentId);
-}
-
 export async function updateSummaryAction(
     prevState: SummaryActionState,
     formData: FormData

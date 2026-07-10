@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Input } from "../ui/input";
 import { cn, extractYouTubeId } from "@/lib/utils";
 import { SubmitButton } from "../custom/SubmitButton";
 import { generateSummaryService } from "@/data/services/summary-service";
-import { createSummaryAction } from "@/data/actions/summary-actions";
 
 interface StrapiErrorsProps {
   message: string | null;
@@ -19,6 +19,7 @@ const INITIAL_STATE = {
 };
 
 export function SummaryForm() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<StrapiErrorsProps>(INITIAL_STATE);
   const [value, setValue] = useState<string>("");
@@ -46,37 +47,24 @@ export function SummaryForm() {
 
     toast.success("Generating Summary");
 
-    const summaryResponseData = await generateSummaryService(processedVideoId);
-
-    if (summaryResponseData.error) {
-      setValue("");
-      toast.error(summaryResponseData.error);
-      setError({
-        ...INITIAL_STATE,
-        message: summaryResponseData.error,
-        name: "Summary Error",
-      });
-      setLoading(false);
-      return;
-    }
-
-    const payload = {
-      data: {
-        title: `Summary for video ${processedVideoId}`,
-        videoId: processedVideoId,
-        summary: summaryResponseData.data,
-      },
-    };
-
     try {
-      await createSummaryAction(payload);
-      toast.success("Summary Created");
-      // Reset form after successful creation
+      const summaryResponseData = await generateSummaryService(processedVideoId);
+      if (summaryResponseData.error || !summaryResponseData.data) {
+        const message = summaryResponseData.error ?? "Failed to generate summary.";
+        setValue("");
+        toast.error(message);
+        setError({ message, name: "Summary Error" });
+        return;
+      }
+
+      toast.success("Summary created");
       setValue("");
       setError(INITIAL_STATE);
+      router.push(`/dashboard/summaries/${summaryResponseData.data.documentId}`);
+      router.refresh();
     } catch (error) {
       let errorMessage =
-        "An unexpected error occured while creating the summary";
+        "An unexpected error occurred while creating the summary";
 
       if (error instanceof Error) {
         errorMessage = error.message;
@@ -89,10 +77,9 @@ export function SummaryForm() {
         message: errorMessage,
         name: "Summary Error",
       });
+    } finally {
       setLoading(false);
-      return;
     }
-    setLoading(false);
   }
 
   function clearError() {
